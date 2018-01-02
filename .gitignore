@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+#mongoose build files
+./esp/mongoose/build/

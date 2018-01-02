@@ -1,0 +1,24 @@
+{
+  "device": {
+    "id": "esp8266" //todo
+  },
+  "wifi": {
+    "sta": {
+      "enable": true,
+      "ssid": "", //todo
+      "pass": "" //todo
+    },
+    "ap": {
+      "enable": false
+    }
+  },
+  "mqtt": {
+    "enable": true,
+    "server": "" //todo
+  },
+  //might not be required
+  "dash": {
+    "enable": true,
+    "token": "" 
+  }
+}

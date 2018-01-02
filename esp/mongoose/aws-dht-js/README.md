@@ -10,3 +10,4 @@ This is a project to send DHT data to AWS-IOT. It publishes data to a thing shad
 - Clone this repository
 - cd into repo and run "sudo mos build --arch \<device-name\>" (e.g. sudo mos build --arch esp8266)
 - Connect your device and run "sudo mos flash"
+

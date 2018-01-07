@@ -47,8 +47,9 @@ filesystem:
 
 config_schema:
  - ["app", "o", {title: "App custom settings"}]
- - ["app.pin", "i", 5, {title: "GPIO pin a sensor is attached to"}]
+ - ["app.dht", "i", 5, {title: "GPIO pin a sensor is attached to"}]
  - ["app.interval", "i", 5000, {title: "Sensor data publish interval in ms"}]
+ - ["app.led", "i", 2, {title: "Sensor data publish interval in ms"}]
 
 
 

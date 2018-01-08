@@ -1,0 +1,11 @@
+1. Create a thing in the dashboard
+2. Create devices under that thing as:
+	a. Temperature, double
+	b. Humidity, double
+	c. LED, boolean, actuator
+3. Download certificates and keep them in a seperate folder
+4. Clone the repo aws-dht-js
+5. Now put the certificate files into fs folder
+6. Change the conf1.json and code according to generate_client as found on IoT platform
+7. Build and flash
+8. Go to dashboard and check if you are getting the output.

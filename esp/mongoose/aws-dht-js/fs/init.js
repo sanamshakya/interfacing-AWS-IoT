@@ -1,50 +1,71 @@
 load('api_config.js');
 load('api_gpio.js');
 load('api_mqtt.js');
+load('api_dht.js');
 load('api_net.js');
 load('api_sys.js');
 load('api_timer.js');
 
-let led = Cfg.get('pins.led');
-GPIO.set_mode(led, GPIO.MODE_OUTPUT);
-let updateTopic = "$aws/things/thing3/shadow/update";
+// Configuration for devices attached to the thing
+let led = Cfg.get('app.led');
+let dhtPin = Cfg.get('app.dht');
 
+// Getting name of the thing from config
+let thingName = Cfg.get('aws.thing_name');
+
+// Setting pin mode for led as output
+GPIO.set_mode(led, GPIO.MODE_OUTPUT);
+
+// Creating dht object
+let dht = DHT.create(dhtPin, DHT.DHT22); 
+
+// All AWS thing shadow topics
+let updateTopic = "$aws/things/"+thingName+"/shadow/update";
+let updateAcceptedTopic = "$aws/things/"+thingName+"/shadow/update/accepted";
+let updateRejectedTopic = "$aws/things/"+thingName+"/shadow/update/rejected";
+let updateDeltaTopic = "$aws/things/"+thingName+"/shadow/update/delta";
+
+// function to publish data to thing shadow
 function report(){
   print ("updating ", (GPIO.read(led)));
   let topic = updateTopic;
+    // TODO
     let message = JSON.stringify({
       "state":{
        "reported":{
-          "device4.14": GPIO.read(led)===0?1:0,
-          "device4.15": Sys.total_ram(),
-          "device4.16": Sys.free_ram()
+          "device46.72": GPIO.read(led)===0?1:0,
+          "device46.70": dht.getTemp(),
+          "device46.71": dht.getHumidity()
        }
      }
   });
-  MQTT.pub("$aws/things/thing3/shadow/update", message, 1);
+  MQTT.pub(updateTopic, message, 1);
 }
 
-Timer.set(30000, true, function() {
+// calls report method after 5000 seconds
+Timer.set(Cfg.get('app.interval'), true, function() {
   report();
 }, null);
 
-MQTT.sub('$aws/things/thing3/shadow/update/accepted', function(conn, topic, msg) {
-  print('Topic:', topic, 'message:', JSON.parse(msg));
+// Subscription to AWS thing shadow topics
+MQTT.sub(updateAcceptedTopic, function(conn, topic, msg) {
+  print('Topic:', topic, 'message:', JSON.stringify(msg));
 }, null);
 
-MQTT.sub('$aws/things/thing3/shadow/update/rejected', function(conn, topic, msg) {
-  print('Topic:', topic, 'message:', JSON.parse(msg));
+MQTT.sub(updateRejectedTopic, function(conn, topic, msg) {
+  print('Topic:', topic, 'message:', JSON.stringify(msg));
 }, null);
 
-MQTT.sub('$aws/things/thing3/shadow/update/delta', function(conn, topic, msg) {
-  print('Topic:', topic, 'message:', JSON.parse(msg));
+MQTT.sub(updateDeltaTopic, function(conn, topic, msg) {
+  print('Topic:', topic, 'message:', JSON.stringify(msg));
   let m = JSON.parse(msg); 
-  GPIO.write(led, m.state["device4.14"]===0?1:0);
+  // TODO
+  GPIO.write(led, m.state["device46.72"]===0?1:0);
   report();
 }, null);
+
 
 // Monitor network connectivity.
-
 Net.setStatusEventHandler(function(ev, arg) {
   let evs = '???';
   if (ev === Net.STATUS_DISCONNECTED) {

@@ -17,7 +17,7 @@ let thingName = Cfg.get('aws.thing_name');
 GPIO.set_mode(led, GPIO.MODE_OUTPUT);
 
 // Creating dht object
-let dht = DHT.create(dhtPin, DHT.DHT22); 
+let dht = DHT.create(dhtPin, DHT.DHT11);
 
 // All AWS thing shadow topics
 let updateTopic = "$aws/things/"+thingName+"/shadow/update";
@@ -33,9 +33,9 @@ function report(){
     let message = JSON.stringify({
       "state":{
        "reported":{
-          "device46.72": GPIO.read(led)===0?1:0,
-          "device46.70": dht.getTemp(),
-          "device46.71": dht.getHumidity()
+          "device??.??": GPIO.read(led)===0?1:0,//for led
+          "device??.??": dht.getTemp(), //for temperature
+          "device??.??": dht.getHumidity() //for humidity
        }
      }
   });
@@ -58,9 +58,9 @@ MQTT.sub(updateRejectedTopic, function(conn, topic, msg) {
 
 MQTT.sub(updateDeltaTopic, function(conn, topic, msg) {
   print('Topic:', topic, 'message:', JSON.stringify(msg));
-  let m = JSON.parse(msg); 
+  let m = JSON.parse(msg);
   // TODO
-  GPIO.write(led, m.state["device46.72"]===0?1:0);
+  GPIO.write(led, m.state["device??.??"]===0?1:0);
   report();
 }, null);
 

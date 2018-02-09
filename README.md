@@ -1,7 +1,7 @@
 # interfacing-AWS-IoT
 
-demo-js app link - https://mongoose-os.com/docs/reference/apps.html
+Demo-js app link - https://mongoose-os.com/docs/reference/apps.html
 
-IoT Dashboard link: http://ec2-13-229-107-106.ap-southeast-1.compute.amazonaws.com/login
+IoT Dashboard link: http://iot.e-yantra.com
 
-MQTT Server: a221a6r4ojicsi.iot.ap-southeast-1.amazonaws.com
+AWS MQTT endpoint: a221a6r4ojicsi.iot.ap-southeast-1.amazonaws.com
